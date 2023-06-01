@@ -1,0 +1,54 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MedTrack | Admin</title>
+        <link rel="stylesheet" th:href="@{/styles/admin.css}" />
+        <link rel="stylesheet" th:href="@{/styles/global.css}" />
+    </head>
+    <body class="bg-secondary">
+        <main class="bg-light">
+            <img th:src="@{/images/logo.png}" class="logo" alt="">
+            <h2>Admin Login</h2>
+            <form
+                method="post"
+                th:action="@{/admin}"
+                th:object="${adminMapper}"
+            >
+                <div>
+                    <label for="email">Email:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        th:field="*{email}"
+                    />
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        th:field="*{password}"
+                    />
+                </div>
+                <div>
+                    <span
+                        class="text-danger"
+                        th:if="${#fields.hasErrors('email')}"
+                        th:errors="*{email}"
+                        >Error</span
+                    >
+                </div>
+                <div>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>
