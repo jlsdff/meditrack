@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,11 +23,14 @@ public class Record {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long recordId;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<MedicalHistory> medicalHistory;    
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<Examination> examination;
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private Student student;
 
     @ManyToOne(cascade = {CascadeType.ALL})
     private Admin admin;

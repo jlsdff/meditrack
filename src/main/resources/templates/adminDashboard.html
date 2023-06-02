@@ -15,7 +15,11 @@
             <nav>
                 <span>Admin Dashboard</span>
                 <ul class="menu">
-                    <li ><a class="nav-link" th:href="@{/admin/dashboard}">Dashboard</a></li>
+                    <li>
+                        <a class="nav-link" th:href="@{/admin/dashboard}"
+                            >Dashboard</a
+                        >
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle">
                             <svg
@@ -29,28 +33,159 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-caption"><p th:text="|Sign in as ${admin.firstName} ${admin.lastName}|"></p></li>
+                            <li class="dropdown-caption">
+                                <p
+                                    th:text="|Sign in as ${admin.firstName} ${admin.lastName}|"
+                                ></p>
+                            </li>
                             <li>
-                                <a th:href="@{/admin}">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        height="1em"
-                                        viewBox="0 0 512 512"
-                                    >
-                                        <path
-                                            d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"
-                                        />
-                                    </svg>
-                                    <span>Logout</span></a
+                                <form
+                                    th:action="@{/admin/dashboard/logout}"
+                                    method="post"
                                 >
+                                    <button type="submit">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            height="1em"
+                                            viewBox="0 0 512 512"
+                                        >
+                                            <path
+                                                d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"
+                                            />
+                                        </svg>
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
                             </li>
                         </ul>
                     </li>
-                    <!-- <li><a href="#">About</a></li> -->
-                    <!-- <li><a href="#">Contact</a></li> -->
                 </ul>
             </nav>
         </header>
-        <main></main>
+        <main>
+            <form
+                method="post"
+                th:action="@{/admin/dashboard/findStudent}"
+                class="lrn-form"
+                th:object="${student}"
+            >
+                <div class="lrn-input">
+                    <label for="studentLRN">Enter LRN: </label>
+                    <input type="number" id="studentLRN" th:field="*{LRN}" />
+                    <span
+                        class="text-danger"
+                        th:if="${#fields.hasErrors('LRN')}"
+                        th:errors="*{LRN}"
+                    ></span>
+                    <button>Get Student</button>
+                </div>
+                <div
+                    id="studen-info"
+                    th:if="${isStudentExist} == true"
+                    class="lrn-result"
+                >
+                    <img th:src="@{/images/profile-icon.png}" alt="" />
+                    <div th:object="${student}">
+                        <h2
+                            th:text="|*{lastName}, *{firstName} *{middleName}|"
+                            class="text-success"
+                        ></h2>
+                    </div>
+                    <div class="other-info">
+                        <hr />
+                        <p><b>Age: </b><span th:text="*{age}"></span></p>
+                        <p>
+                            <b>Birthday: </b
+                            ><span th:text="*{birthDate}"></span>
+                        </p>
+                        <p>
+                            <b>Contact Number: </b
+                            ><span th:text="*{contactNumber}"></span>
+                        </p>
+                        <hr />
+                        <h3 class="text-danger">In Case of Emergency:</h3>
+                        <div th:object="${student.emergencyContact}">
+                            <p>
+                                <b>First Name: </b
+                                ><span th:text="*{firstName}"></span>
+                            </p>
+                            <p>
+                                <b>SurName: </b
+                                ><span th:text="*{lastName}"></span>
+                            </p>
+                            <p>
+                                <b>Contact Number: </b
+                                ><span th:text="*{contactNumber}"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <section th:if="${isStudentExist} == true">
+                <h1>Add Record</h1>
+                <!-- ADD RECORD HERE -->
+                <section th:if="${isStudentExist} == true">
+                    <!-- <form
+                        method="post"
+                        th:action="@{/admin/dashboard/addRecord}"
+                        th:object="${record}"
+                    > -->
+
+                    <h2>Medical History</h2>
+                    <div id="medicalHistoryContainer">
+                        <form
+                            method="post"
+                            th:action="@{/admin/dashboard/addMedicalHistory}"
+                            th:object="${medicalHistory}"
+                        >
+                            <input
+                                type="text"
+                                th:field="*{name}"
+                                placeholder="Name"
+                            /><br />
+                            <input
+                                type="text"
+                                th:field="*{detail}"
+                                placeholder="Detail"
+                            /><br />
+                            <button type="button" onclick="addMedicalHistory()">
+                                Add Medical History
+                            </button>
+
+                            <input type="submit" value="Submit" />
+                        </form>
+                    </div>
+
+                    <hr />
+
+                    <h2>Examinations</h2>
+                    <div id="examinationContainer">
+                        <form
+                            action="@{/admin/dashboard/addExamination}"
+                            method="post"
+                            th:object="${examination}"
+                        >
+                            <input
+                                type="text"
+                                th:field="*{name}"
+                                placeholder="Name"
+                            /><br />
+                            <input
+                                type="text"
+                                th:field="*{detail}"
+                                placeholder="Detail"
+                            /><br />
+                            <button type="button" onclick="addExamination()">
+                                Add Examination
+                            </button>
+
+                            <input type="submit" value="Submit" />
+                        </form>
+                    </div>
+                </section>
+            </section>
+        </main>
+        <script th:src="@{/scripts/adminDashboard.js}"></script>
     </body>
 </html>

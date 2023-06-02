@@ -61,3 +61,57 @@ nav ul.menu li:hover > ul.dropdown-menu {
 .dropdown-caption {
     text-align: center;
 }
+
+main {
+    padding: 30px 60px;
+}
+.lrn-form {
+    padding: 30px 60px;
+    border-radius: 1rem 1rem 0 0;
+    border: 1px solid gray;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.lrn-input {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-right: 1rem;
+}
+.lrn-input > label {
+    margin-bottom: 10px;
+}
+.lrn-input > input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    margin-bottom: 15px;
+}
+.lrn-input > button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: var(--clr-light);
+    border: none;
+    background-color: var(--clr-primary);
+    cursor: pointer;
+}
+.lrn-result {
+    width: 50%;
+    border-left: 1px solid gray;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.lrn-result > img {
+    width: 20%;
+    object-fit: cover;
+}
+.lrn-result > .other-info {
+    width: 100%;
+}
