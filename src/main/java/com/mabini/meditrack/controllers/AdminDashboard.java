@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -20,6 +21,7 @@ import com.mabini.meditrack.models.MedicalHistory;
 import com.mabini.meditrack.models.Record;
 import com.mabini.meditrack.models.Student;
 import com.mabini.meditrack.services.IAdminService;
+import com.mabini.meditrack.services.IRecordService;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Valid;
@@ -28,13 +30,15 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequestMapping("/admin/dashboard")
-@SessionAttributes({ "admin", "student", "medicalHistory", "examination", "medicalHistoryList", "examinationList" })
+@SessionAttributes({ "admin", "student", "medicalHistories", "examinations", "isStudentExist" })
 public class AdminDashboard {
 
-    public final IAdminService adminService;
+    private final IAdminService adminService;
+    private final IRecordService recordService;
 
-    public AdminDashboard(IAdminService adminService) {
+    public AdminDashboard(IAdminService adminService, IRecordService recordService) {
         this.adminService = adminService;
+        this.recordService = recordService;
     }
 
     @ModelAttribute
@@ -64,13 +68,13 @@ public class AdminDashboard {
         return new Examination();
     }
 
-    @ModelAttribute("medicalHistoryList")
-    public List<MedicalHistory> medicalHistoryList() {
+    @ModelAttribute("medicalHistories")
+    public ArrayList<MedicalHistory> medicalHistoryList() {
         return new ArrayList<MedicalHistory>();
     }
 
-    @ModelAttribute("examinationList")
-    public List<Examination> examinationList() {
+    @ModelAttribute("examinations")
+    public ArrayList<Examination> examinationList() {
         return new ArrayList<Examination>();
     }
 
@@ -80,7 +84,7 @@ public class AdminDashboard {
     }
 
     @PostMapping("/findStudent")
-    public String findStudent(@Valid @ModelAttribute Student student, Errors errors, Model model) {
+    public String findStudent(@Valid Student student, Errors errors, Model model) {
 
         long LRN = student.getLRN();
 
@@ -99,38 +103,46 @@ public class AdminDashboard {
 
     @PostMapping("/addRecord")
     public String addRecord(
-            @Valid @ModelAttribute Record record,
-            @ModelAttribute Student student,
+            @Valid Record record,
+            @SessionAttribute Student student,
+            @SessionAttribute Admin admin,
             Model model,
             Errors errors) {
 
-        log.info(model.asMap().get("student").toString());
-
-        record.setStudent((Student) model.getAttribute("student"));
-        record.setAdmin((Admin) model.getAttribute("admin"));
-
-        log.info("NEW RECORD: {}", record.toString());
-
-        return "adminDashboard";
-    }
-
-    @PostMapping("/addMedicalHistory")
-    public String addMedicalRecord(
-            @Valid MedicalHistory medicalHistory,
-            @ModelAttribute List<MedicalHistory> medicalHistories,
-            Model model,
-            Errors errors) {
-
-        if (errors.hasErrors()) {
-            return "adminDashboard";
+        record.setStudent(student);
+        record.setAdmin(admin);
+        for(MedicalHistory history: record.getMedicalHistory()) {
+            history.setRecord(record);
+        }
+        for(Examination examination: record.getExamination()) {
+            examination.setRecord(record);
         }
 
-        medicalHistories.add(medicalHistory);
-        log.info("", medicalHistories.toString());
-        log.info("NEW MEDICAL HISTORY: {}", medicalHistory.toString());
-
+        Record savedRecord = recordService.save(record);
+        System.out.println("\n" + savedRecord.toString() + "\n");
+        log.info("NEW RECORD: {}", record.toString());
         return "adminDashboard";
     }
+
+    // @PostMapping("/addMedicalHistory")
+    // public String addMedicalRecord(
+    // @Valid MedicalHistory medicalHistory,
+    // @SessionAttribute ArrayList<MedicalHistory> medicalHistories,
+    // @SessionAttribute Student student,
+    // Model model,
+    // Errors errors) {
+
+    // if (errors.hasErrors()) {
+    // return "adminDashboard";
+    // }
+
+    // medicalHistories.add(medicalHistory);
+    // log.info("Student: {}", student.toString());
+    // log.info("NEW MEDICAL HISTORY: {}", medicalHistory.toString());
+    // log.info("MED HISTORY: {}", medicalHistories.toString());
+
+    // return "adminDashboard";
+    // }
 
     @PostMapping("/logout")
     public String logout(SessionStatus sessionStatus) {

@@ -34,8 +34,13 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Option 1</a></li>
-                            <li><a href="#">Option 2</a></li>
+                            <li>
+                                <span th:object="${studentAccount}">
+                                    <span
+                                        th:text="|Sign in as *{student.firstName} *{student.lastName}|"
+                                    ></span>
+                                </span>
+                            </li>
                             <li>
                                 <a th:href="@{/}">
                                     <svg
@@ -52,8 +57,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
         </header>
@@ -114,6 +117,35 @@
                 <h2 class="section-title text-primary">Records</h2>
                 <div th:switch="${#lists.size(studentAccount.student.record)}">
                     <h3 th:case="0" class="text-danger">No Records</h3>
+                    <div th:case="*">
+                        <div
+                            th:each="record : ${studentAccount.student.record}"
+                        >
+                            <form
+                                class="record-form"
+                                action="#"
+                                th:action="@{/student-record}"
+                                method="get"
+                                th:object="${record}"
+                            >
+                                <div>
+                                    <input type="hidden" th:value="*{recordId}">
+                                    <h3
+                                        th:text="|Record no. ${record.recordId}|"
+                                    >
+                                        record
+                                    </h3>
+                                    <h5
+                                        class="text-dark"
+                                        th:text="|Encoded by: ${record.admin.lastName}, ${record.admin.firstName}|"
+                                    >
+                                        Record
+                                    </h5>
+                                </div>
+                                <button>See Record</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>

@@ -24,7 +24,6 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "students")
 public class Student {
 
@@ -51,6 +50,6 @@ public class Student {
     @OneToOne(cascade = {CascadeType.ALL})
     private EmergencyRecord emergencyContact;
     
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "student")
     private List<Record> record;
 }

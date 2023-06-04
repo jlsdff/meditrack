@@ -71,7 +71,12 @@
             >
                 <div class="lrn-input">
                     <label for="studentLRN">Enter LRN: </label>
-                    <input type="number" id="studentLRN" th:field="*{LRN}" />
+                    <input
+                        type="number"
+                        id="studentLRN"
+                        th:field="*{LRN}"
+                        th:value="'100000000000'"
+                    />
                     <span
                         class="text-danger"
                         th:if="${#fields.hasErrors('LRN')}"
@@ -124,13 +129,7 @@
 
             <section th:if="${isStudentExist} == true">
                 <h1>Add Record</h1>
-                <!-- ADD RECORD HERE -->
-                <section th:if="${isStudentExist} == true">
-                    <!-- <form
-                        method="post"
-                        th:action="@{/admin/dashboard/addRecord}"
-                        th:object="${record}"
-                    > -->
+                <!-- <section th:if="${isStudentExist} == true">
 
                     <h2>Medical History</h2>
                     <div id="medicalHistoryContainer">
@@ -183,7 +182,53 @@
                             <input type="submit" value="Submit" />
                         </form>
                     </div>
-                </section>
+                </section> -->
+
+                <form
+                    th:action="@{/admin/dashboard/addRecord}"
+                    method="post"
+                    th:object="${record}"
+                >
+
+                    <h3>Medical History</h3>
+                    <div id="medicalHistoryContainer">
+                        <input
+                            type="text"
+                            th:field="*{medicalHistory[0].name}"
+                            placeholder="Name"
+                        /><br />
+                        <input
+                            type="text"
+                            th:field="*{medicalHistory[0].detail}"
+                            placeholder="Detail"
+                        /><br />
+                    </div>
+
+                    <button type="button" onclick="addMedicalHistory()">
+                        Add Examination
+                    </button>
+                    
+                    <br>
+
+                    <h3>Examinations</h3>
+                    <div id="examinationContainer">
+                        <input
+                            type="text"
+                            th:field="*{examination[0].name}"
+                            placeholder="Name"
+                        /><br />
+                        <input
+                            type="text"
+                            th:field="*{examination[0].detail}"
+                            placeholder="Detail"
+                        /><br />
+                    </div>
+                    <button type="button" onclick="addExamination()">
+                        Add Examination
+                    </button>
+
+                    <input type="submit" value="Submit" />
+                </form>
             </section>
         </main>
         <script th:src="@{/scripts/adminDashboard.js}"></script>

@@ -8,8 +8,8 @@ function addMedicalHistory() {
     var entry = document.createElement("div");
     entry.className = "medicalHistoryEntry";
     entry.innerHTML =
-        `<input type="text" th:field="*{medicalHistory[${medicalHistoryIndex}].name}" placeholder="Name" /><br/>`+
-        `<input type="text" th:field="*{medicalHistory[${medicalHistoryIndex}].detail}" placeholder="Detail" /><br/>`;
+        `<input type="text" id="medicalHistory${medicalHistoryIndex}.name" name="medicalHistory[${medicalHistoryIndex}].name" placeholder="Name" /><br/>`+
+        `<input type="text" id="medicalHistory${medicalHistoryIndex}.detail" name="medicalHistory[${medicalHistoryIndex}].detail" placeholder="Detail" /><br/>`;
     container.appendChild(entry);
     medicalHistoryIndex++;
 }
@@ -19,8 +19,8 @@ function addExamination() {
     var entry = document.createElement("div");
     entry.className = "examinationEntry";
     entry.innerHTML =
-        `<input type="text" th:field="*{examination[${examinationIndex}].name}" placeholder="Name" /><br/>` +
-        `<input type="text" th:field="*{examination[${examinationIndex}].detail}" placeholder="Detail" /><br/>`;
+        `<input type="text" id="examination${examinationIndex}.name" name="examination[${examinationIndex}].name" placeholder="Name" /><br/>` +
+        `<input type="text" id="examination${examinationIndex}.detail" name="examination[${examinationIndex}].detail" placeholder="Detail" /><br/>`;
     container.appendChild(entry);
     examinationIndex++;
 }
